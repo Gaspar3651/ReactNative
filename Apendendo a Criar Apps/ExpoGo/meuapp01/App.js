@@ -4,27 +4,24 @@ class App extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			nome: 'Andrielysson'
+			nome: 'Andrielysson',
+			btn: 'Batata'
 		};
 
 		this.mudarNome = this.mudarNome.bind(this);
 	}
 
 	mudarNome(nome){
-		if (this.state.nome == 'Andrielysson') {
-			this.setState({
-				nome: nome
-			});
-		} else {
-			this.setState({
-				nome: 'Andrielysson'
-			});
-		}
+		this.setState({
+			nome: this.state.btn,
+			btn: this.state.nome,
+		});
 	}
 
 	render(){
 		let nome = 'Andrielysson';
 		let img = 'https://sujeitoprogramador.com/steve.png';
+		let nameBtn = 'Mudar nome do state para ' + this.state.btn;
 		
 		return(
 			<View style={styles.container} >
@@ -34,7 +31,7 @@ class App extends Component {
 					<Text style={{fontSize: 25}}>Olá Mundo!!!!</Text>
 					<Text style={{fontSize: 25}}>Meu primeiro App</Text>
 
-					<Button title='Mudar nome do state' onPress={ () => this.mudarNome('Batata') }/>
+					<Button title={nameBtn} onPress={ () => this.mudarNome('Batata') }/>
 
 					<Text style={{ fontSize: 25, textAlign: 'center' }}>Nome com state: {this.state.nome}</Text>
 
@@ -80,20 +77,18 @@ const styles = StyleSheet.create({
 	},
 
 	header: {
-		height: 65, 
-		backgroundColor: 'red'
+		height: 70, 
+		backgroundColor: '#ddd'
 	},
 
 	body: {
 		flex: 1,
-		paddingLeft: 25,
-		paddingRight: 25,
-		backgroundColor: '#ddd'
+		padding: 25,
 	},
 
 	footer: {
-		height: 65, 
-		backgroundColor: 'green' 
+		height: 70, 
+		backgroundColor: '#ddd'
 	},
 
 	textoPrincipal:{
