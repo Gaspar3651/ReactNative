@@ -28,43 +28,29 @@ class App extends Component {
 		
 		return(
 			<View style={styles.container} >
-				<Text style={{fontSize: 25}}>Olá Mundo!!!!</Text>
-				<Text style={{fontSize: 25}}>Meu primeiro App</Text>
+				<View style={[styles.header]}></View>
 
-				<Button
-					title='Mudar nome do state'
-					onPress={ () => this.mudarNome('Batata') }
-				/>
+				<View style={[styles.body]}>
+					<Text style={{fontSize: 25}}>Olá Mundo!!!!</Text>
+					<Text style={{fontSize: 25}}>Meu primeiro App</Text>
 
-				<Text 
-					style={{
-						fontSize: 25,
-						textAlign: 'center'
-					}}
-				>
-					Nome com state: {this.state.nome}
-				</Text>
+					<Button title='Mudar nome do state' onPress={ () => this.mudarNome('Batata') }/>
 
-				<Text 
-					style={{
-						fontSize: 25,
-						marginTop: 15,
-						marginLeft: 15
-					}}
-				>
-					Sujeito Programador: {nome}
-				</Text>
+					<Text style={{ fontSize: 25, textAlign: 'center' }}>Nome com state: {this.state.nome}</Text>
 
-				<Jobs
-					largura={400}
-					altura={400}
-					nome="Steve Jobs"
-				/>
+					<Text  style={{ fontSize: 25, marginTop: 15, marginLeft: 15 }} >Sujeito Programador: {nome}</Text>
 
-				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 01</Text>
-				<Text style={styles.alinhaTexto}>Texto 02</Text>
-				<Text style={styles.alinhaTexto}>Texto 03</Text>
-				<Text style={styles.alinhaTexto}>Texto 04</Text>
+					<Jobs largura={400} altura={400} nome="Steve Jobs"/>
+
+					<View style={[styles.flexBox]}>
+						<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 01</Text>
+						<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 02</Text>
+						<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 03</Text>
+						<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 04</Text>
+					</View>
+				</View>
+				
+				<View style={[styles.footer]}></View>
 			</View>
 		);
 	}
@@ -79,12 +65,9 @@ class Jobs extends Component {
 				<Text style={{ fontSize: 25, margin: 15 }} >{this.props.nome}</Text>
 				<Image
 					source={{ uri: img }}
-					style={{ 
-						width: this.props.largura, 
-						height: this.props.altura 
-					}}
+					style={{ width: this.props.largura, height: this.props.altura, margin: 'auto' }}
 					onPress={ () => this.entrar('Batata') }
-					/>
+				/>
 			</View>
 		);
 	}
@@ -92,18 +75,39 @@ class Jobs extends Component {
 
 const styles = StyleSheet.create({
 	container:{
-		marginTop: 100,
-		marginLeft: 25,
-		marginRight: 25
+		flex: 1,
+		marginTop: 50,
+	},
+
+	header: {
+		height: 65, 
+		backgroundColor: 'red'
+	},
+
+	body: {
+		flex: 1,
+		paddingLeft: 25,
+		paddingRight: 25,
+		backgroundColor: '#ddd'
+	},
+
+	footer: {
+		height: 65, 
+		backgroundColor: 'green' 
 	},
 
 	textoPrincipal:{
-		fontSize: 35,
+		fontSize: 25,
 		color: 'red'
 	},
 
 	alinhaTexto:{
 		textAlign: 'center'
+	},
+
+	flexBox:{
+		flexDirection: 'row',
+		justifyContent: 'space-between'
 	}
 });
 
