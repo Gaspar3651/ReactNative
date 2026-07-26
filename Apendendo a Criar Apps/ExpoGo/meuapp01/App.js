@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, Button } from 'react-native';
+import { View, Text, Image, Button, StyleSheet } from 'react-native';
 class App extends Component {
 	constructor(props){
 		super(props);
@@ -7,10 +7,10 @@ class App extends Component {
 			nome: 'Andrielysson'
 		};
 
-		this.entrar = this.entrar.bind(this);
+		this.mudarNome = this.mudarNome.bind(this);
 	}
 
-	entrar(nome){
+	mudarNome(nome){
 		if (this.state.nome == 'Andrielysson') {
 			this.setState({
 				nome: nome
@@ -27,19 +27,18 @@ class App extends Component {
 		let img = 'https://sujeitoprogramador.com/steve.png';
 		
 		return(
-			<View>
-				<Text style={{marginTop: 100, fontSize: 25}}>Olá Mundo!!!!</Text>
+			<View style={styles.container} >
+				<Text style={{fontSize: 25}}>Olá Mundo!!!!</Text>
 				<Text style={{fontSize: 25}}>Meu primeiro App</Text>
 
 				<Button
 					title='Mudar nome do state'
-					onPress={ () => this.entrar('Batata') }
+					onPress={ () => this.mudarNome('Batata') }
 				/>
 
 				<Text 
 					style={{
 						fontSize: 25,
-						color: 'red',
 						textAlign: 'center'
 					}}
 				>
@@ -61,6 +60,11 @@ class App extends Component {
 					altura={400}
 					nome="Steve Jobs"
 				/>
+
+				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 01</Text>
+				<Text style={styles.alinhaTexto}>Texto 02</Text>
+				<Text style={styles.alinhaTexto}>Texto 03</Text>
+				<Text style={styles.alinhaTexto}>Texto 04</Text>
 			</View>
 		);
 	}
@@ -86,6 +90,21 @@ class Jobs extends Component {
 	}
 }
 
+const styles = StyleSheet.create({
+	container:{
+		marginTop: 100,
+		marginLeft: 25,
+		marginRight: 25
+	},
 
+	textoPrincipal:{
+		fontSize: 35,
+		color: 'red'
+	},
+
+	alinhaTexto:{
+		textAlign: 'center'
+	}
+});
 
 export default App;
