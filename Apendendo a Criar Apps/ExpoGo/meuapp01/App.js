@@ -24,26 +24,29 @@ class App extends Component {
 		
 		return(
 			<View style={styles.container} >
-				<View style={[styles.header]}></View>
+				<View style={[styles.header]}>
+					<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 01</Text>
+					<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 02</Text>
+					<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 03</Text>
+					<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 04</Text>
+				</View>
 
 				<View style={[styles.body]}>
-					<Text style={{fontSize: 25}}>Olá Mundo!!!!</Text>
+					<Text style={{fontSize: 25}}>Olá Mundo !!!!</Text>
 					<Text style={{fontSize: 25}}>Meu primeiro App</Text>
 
 					<Button title={nameBtn} onPress={ () => this.mudarNome('Batata') }/>
 					<Text  style={{ fontSize: 25, marginTop: 15, marginLeft: 15 }} >Sujeito Programador: {this.state.nome}</Text>
 
 					<Jobs largura={400} altura={400} nome="Steve Jobs"/>
-
-					<View style={[styles.flexBox]}>
-						<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 01</Text>
-						<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 02</Text>
-						<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 03</Text>
-						<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 04</Text>
-					</View>
 				</View>
 				
-				<View style={[styles.footer]}></View>
+				<View style={[styles.footer]}>
+					<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 01</Text>
+					<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 02</Text>
+					<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 03</Text>
+					<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 04</Text>
+				</View>
 			</View>
 		);
 	}
@@ -74,7 +77,10 @@ const styles = StyleSheet.create({
 
 	header: {
 		height: 70, 
-		backgroundColor: '#ddd'
+		backgroundColor: '#ddd',
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		alignItems: 'center'
 	},
 
 	body: {
@@ -84,7 +90,10 @@ const styles = StyleSheet.create({
 
 	footer: {
 		height: 70, 
-		backgroundColor: '#ddd'
+		backgroundColor: '#ddd',
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		alignItems: 'center'
 	},
 
 	textoPrincipal:{
@@ -94,11 +103,6 @@ const styles = StyleSheet.create({
 
 	alinhaTexto:{
 		textAlign: 'center'
-	},
-
-	flexBox:{
-		flexDirection: 'row',
-		justifyContent: 'space-between'
 	}
 });
 
