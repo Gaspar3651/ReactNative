@@ -19,7 +19,6 @@ class App extends Component {
 	}
 
 	render(){
-		let nome = 'Andrielysson';
 		let img = 'https://sujeitoprogramador.com/steve.png';
 		let nameBtn = 'Mudar nome do state para ' + this.state.btn;
 		
@@ -32,10 +31,7 @@ class App extends Component {
 					<Text style={{fontSize: 25}}>Meu primeiro App</Text>
 
 					<Button title={nameBtn} onPress={ () => this.mudarNome('Batata') }/>
-
-					<Text style={{ fontSize: 25, textAlign: 'center' }}>Nome com state: {this.state.nome}</Text>
-
-					<Text  style={{ fontSize: 25, marginTop: 15, marginLeft: 15 }} >Sujeito Programador: {nome}</Text>
+					<Text  style={{ fontSize: 25, marginTop: 15, marginLeft: 15 }} >Sujeito Programador: {this.state.nome}</Text>
 
 					<Jobs largura={400} altura={400} nome="Steve Jobs"/>
 
