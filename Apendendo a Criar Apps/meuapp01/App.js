@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
 import { View, Text, TextInput, Image, Button, StyleSheet, FlatList, ScrollView } from 'react-native';
+import React, { Component } from 'react';
 import Header from './src/Header';
 import Footer from './src/Footer';
 import Pessoas from './src/Pessoas';
+import Pizza from './src/Pizza';
 
 class App extends Component {
 	constructor(props){
@@ -44,15 +45,17 @@ class App extends Component {
 					<Text style={{fontSize: 25}}>{this.state.nome}</Text>
 					<Text style={{fontSize: 25}}>{this.state.numero}</Text>
 
-					<FlatList
+					<Pizza/>
+
+					{/* <FlatList
 						data={this.state.feed}
 						keyExtrator={(item)=> item.id}
 						renderItem={({ item }) => (
 							<Pessoas data={item}/>
 						)}
-					/>
+					/> */}
 					
-					<Jobs largura={400} altura={400} nome="Steve Jobs"/>
+					{/* <Jobs largura={400} altura={400} nome="Steve Jobs"/> */}
 				</View>
 				
 				<Footer/>
