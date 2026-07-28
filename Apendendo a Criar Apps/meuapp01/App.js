@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Image, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Image, Button, StyleSheet, FlatList, ScrollView } from 'react-native';
 class App extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
 			nome: '',
 			inputNome: '',
-			numero: ''
+			numero: '',
+			feed: [
+				{id: '1', nome: 'Andrielysson',	idade: '18', email: 'teste@gmail.com'	},
+				{id: '2', nome: 'Matheus', 		idade: '22', email: 'batata@gmail.com'	},
+				{id: '3', nome: 'Henrique',		idade: '29', email: 'henrique@gmail.com'},
+				{id: '4', nome: 'Paulo', 		idade: '15', email: 'paulo@gmail.com'	}
+			]
 		};
 
 		this.mudarNome = this.mudarNome.bind(this);
@@ -31,8 +37,16 @@ class App extends Component {
 					<TextInput style={styles.input} placeholder='Digite seu número...' onChangeText={this.formatarNumero}/>
 					<Button title='Entrar' onPress={ () => this.entrar() }/>
 
-					<Text>{this.state.nome}</Text>
-					<Text>{this.state.numero}</Text>
+					<Text style={{fontSize: 25}}>{this.state.nome}</Text>
+					<Text style={{fontSize: 25}}>{this.state.numero}</Text>
+
+					<FlatList
+						data={this.state.feed}
+						keyExtrator={(item)=> item.id}
+						renderItem={({ item }) => (
+							<Pessoa data={item}/>
+						)}
+					/>
 					
 					<Jobs largura={400} altura={400} nome="Steve Jobs"/>
 				</View>
@@ -95,6 +109,17 @@ class App extends Component {
 	
 }
 
+class Pessoa extends Component {
+	render(){
+		return(
+			<View style={styles.areaPessoa}>
+				<Text style={styles.textoPessoa}>Nome: {this.props.data.nome}</Text>
+				<Text style={styles.textoPessoa}>Idade: {this.props.data.idade}</Text>
+				<Text style={styles.textoPessoa}>Email: {this.props.data.email}</Text>
+			</View>
+		);
+	}
+}
 class Jobs extends Component {
 	render(){
 		let img = 'https://sujeitoprogramador.com/steve.png';
@@ -180,6 +205,16 @@ const styles = StyleSheet.create({
 
 	alinhaTexto:{
 		textAlign: 'center'
+	},
+	
+	areaPessoa:{
+		backgroundColor: '#222',
+		height: 100
+	},
+
+	textoPessoa:{
+		color: '#fff',
+		fontSize: 20
 	}
 });
 
