@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, Image, Button, StyleSheet, FlatList, ScrollView } from 'react-native';
+import Header from './src/Header';
+import Footer from './src/Footer';
+import Pessoas from './src/Pessoas';
+
 class App extends Component {
 	constructor(props){
 		super(props);
@@ -44,7 +48,7 @@ class App extends Component {
 						data={this.state.feed}
 						keyExtrator={(item)=> item.id}
 						renderItem={({ item }) => (
-							<Pessoa data={item}/>
+							<Pessoas data={item}/>
 						)}
 					/>
 					
@@ -109,17 +113,6 @@ class App extends Component {
 	
 }
 
-class Pessoa extends Component {
-	render(){
-		return(
-			<View style={styles.areaPessoa}>
-				<Text style={styles.textoPessoa}>Nome: {this.props.data.nome}</Text>
-				<Text style={styles.textoPessoa}>Idade: {this.props.data.idade}</Text>
-				<Text style={styles.textoPessoa}>Email: {this.props.data.email}</Text>
-			</View>
-		);
-	}
-}
 class Jobs extends Component {
 	render(){
 		let img = 'https://sujeitoprogramador.com/steve.png';
@@ -137,43 +130,11 @@ class Jobs extends Component {
 	}
 }
 
-class Footer extends Component{
-	render(){
-		return(
-			<View style={[styles.footer]}>
-				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 01</Text>
-				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 02</Text>
-				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 03</Text>
-				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 04</Text>
-			</View>
-		);
-	}
-}
-class Header extends Component{
-	render(){
-		return(
-			<View style={[styles.header]}>
-				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 01</Text>
-				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 02</Text>
-				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 03</Text>
-				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 04</Text>
-			</View>
-		);
-	}
-}
 
 const styles = StyleSheet.create({
 	container:{
 		flex: 1,
 		marginTop: 50,
-	},
-
-	header: {
-		height: 70, 
-		backgroundColor: '#ddd',
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		alignItems: 'center'
 	},
 
 	body: {
@@ -189,33 +150,6 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 		marginTop: 10
 	},
-
-	footer: {
-		height: 70, 
-		backgroundColor: '#ddd',
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		alignItems: 'center'
-	},
-
-	textoPrincipal:{
-		fontSize: 25,
-		color: 'red'
-	},
-
-	alinhaTexto:{
-		textAlign: 'center'
-	},
-	
-	areaPessoa:{
-		backgroundColor: '#222',
-		height: 100
-	},
-
-	textoPessoa:{
-		color: '#fff',
-		fontSize: 20
-	}
 });
 
 export default App;
