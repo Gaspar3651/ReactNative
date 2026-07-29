@@ -28,6 +28,7 @@ export default class App extends Component {
         this.cadastroCliente = this.cadastroCliente.bind(this);
         this.formatarNumero = this.formatarNumero.bind(this);
         this.formatarDocumento = this.formatarDocumento.bind(this);
+        this.validarDocumento = this.validarDocumento.bind(this);
     }
 
     render(){
@@ -42,7 +43,7 @@ export default class App extends Component {
 
                     <View style={styles.areaCampo}>
                         <Text style={styles.labelCampo}>Nome</Text>
-                        <TextInput style={styles.inputText} placeholder='Digite o seu nome...' onChangeText={ (valor) => {this.setState({ nome : valor })} }/>
+                        <TextInput style={styles.inputText} value={this.state.nome} placeholder='Digite o seu nome...' onChangeText={ (valor) => {this.setState({ nome : valor })} }/>
                     </View>
 
                     <View style={styles.areaCampo}>
@@ -57,7 +58,7 @@ export default class App extends Component {
 
                     <View style={styles.areaCampo}>
                         <Text style={styles.labelCampo}>Idade</Text>
-                        <TextInput style={styles.inputText} keyboardType="numeric" placeholder='Digite a sua idade...' onChangeText={ (valor) => {this.setState({ idade : valor })} }/>
+                        <TextInput style={styles.inputText} value={this.state.idade} keyboardType="numeric" placeholder='Digite a sua idade...' onChangeText={ (valor) => {this.setState({ idade : valor })} }/>
                     </View>
 
                     <View style={styles.areaCampo}>
@@ -65,6 +66,7 @@ export default class App extends Component {
                         <Picker
                             style={styles.inputText} 
                             selectedValue={this.state.sexo}
+                            value={this.state.sexo}
                             onValueChange={ (itemValue, itemIdex) => {this.setState({sexo: this.state.sexoOptions[itemIdex].label})}}
                         >
                             {sexoOptions}
@@ -103,7 +105,7 @@ export default class App extends Component {
     }
 
     cadastroCliente(){
-        let msgAlertError = 'Preenchar corretamente os campos abaixo para continuar:';
+        let msgAlertError = 'Preencha corretamente os campos abaixo para continuar:';
         msgAlertError = (this.state.nome            != null && this.state.nome          != '')  ? msgAlertError : msgAlertError + '\n   - Nome';
         msgAlertError = (this.state.idade           != null && this.state.idade         != '')  ? msgAlertError : msgAlertError + '\n   - Idade';
         msgAlertError = (this.state.telefone        != null && this.state.telefone      != '' && this.state.telefone.length == 16)  ? msgAlertError : msgAlertError + '\n   - Telefone';
@@ -111,8 +113,28 @@ export default class App extends Component {
         msgAlertError = (this.state.sexo            != null && this.state.sexo          != '' && this.state.sexo != '-- Selecione --') ? msgAlertError : msgAlertError + '\n   - Sexo';
         msgAlertError = (this.state.limiteCredito   != null && this.state.limiteCredito != '' && this.state.limiteCredito != '0') ? msgAlertError : msgAlertError + '\n   - Limite de Crédito';
         
-        if (msgAlertError != 'Preenchar corretamente os campos abaixo para continuar:') {
+        if (msgAlertError != 'Preencha corretamente os campos abaixo para continuar:') {
             alert(msgAlertError);
+            return;
+        }
+        
+        if (!this.validarDocumento(this.state.documento)) {
+            alert('Documento fornecido é inválido');
+            return;
+        }
+        
+        console.log('TESTE::: ' + this.state.documento);
+        let docDuplicado = false;
+        this.listClientes.forEach((item, idex) =>{
+            console.log('>>>> ' + item.documento);
+            
+            if (this.state.documento == item.documento){
+                docDuplicado = true;
+            }
+        });
+        
+        if (docDuplicado) {
+            alert('Documento fornecido já está cadastrado');
             return;
         }
 
@@ -128,6 +150,16 @@ export default class App extends Component {
         }
 
         this.listClientes.unshift(novoCliente);
+        this.setState({
+            nome : null,
+            idade : null,
+            documento : null,
+            telefone : null,
+            sexo : '',
+            limiteCredito : 250,
+            extudante : false,
+            clientes: this.listClientes
+        })
         console.log(JSON.stringify(this.listClientes));
         
     }
@@ -184,6 +216,37 @@ export default class App extends Component {
 		this.setState({
 			documento: texto
 		});
+    }
+
+    validarDocumento(cpf){
+        if (typeof cpf !== 'string') return false;
+        cpf = cpf.replace(/[^\d]+/g, '');
+
+        if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+
+        let soma = 0;
+        let resto;
+
+        // Valida 1º dígito
+        for (let i = 1; i <= 9; i++) {
+            soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+        }
+        
+        resto = (soma * 10) % 11;
+        if (resto === 10 || resto === 11) resto = 0;
+        if (resto !== parseInt(cpf.substring(9, 10))) return false;
+
+        // Valida 2º dígito
+        soma = 0;
+        for (let i = 1; i <= 10; i++) {
+            soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+        }
+
+        resto = (soma * 10) % 11;
+        if (resto === 10 || resto === 11) resto = 0;
+        if (resto !== parseInt(cpf.substring(10, 11))) return false;
+
+        return true;
     }
 }
 
