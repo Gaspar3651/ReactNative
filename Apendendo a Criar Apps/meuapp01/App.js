@@ -1,9 +1,9 @@
 import { View, Text, TextInput, Image, Button, StyleSheet, FlatList, ScrollView } from 'react-native';
 import React, { Component } from 'react';
-import Header from './src/Header';
-import Footer from './src/Footer';
-import Pessoas from './src/Pessoas';
-import Pizza from './src/Pizza';
+import Header 			from './src/Components/Header';
+import Footer 			from './src/Components/Footer';
+import Jobs 			from './src/Components/Jobs';
+import FlatListComp 	from './src/Components/FlatListComp';
 
 class App extends Component {
 	constructor(props){
@@ -33,30 +33,24 @@ class App extends Component {
 			<View style={styles.container} >
 				<Header/>
 
-				<View style={[styles.body]}>
-					<Text style={{fontSize: 25}}>Olá Mundo !!!!</Text>
-					<Text style={{fontSize: 25}}>Meu primeiro App</Text>
+				<ScrollView>
+					<View style={[styles.body]}>
+						<Text style={{fontSize: 25}}>Olá Mundo !!!!</Text>
+						<Text style={{fontSize: 25}}>Meu primeiro App</Text>
 
 
-					<TextInput style={styles.input} placeholder='Digite seu nome...' onChangeText={(texto) => {this.setState({inputNome: texto})}}/>
-					<TextInput style={styles.input} placeholder='Digite seu número...' onChangeText={this.formatarNumero}/>
-					<Button title='Entrar' onPress={ () => this.entrar() }/>
+						<TextInput style={styles.input} placeholder='Digite seu nome...' onChangeText={(texto) => {this.setState({inputNome: texto})}}/>
+						<TextInput style={styles.input} placeholder='Digite seu número...' onChangeText={this.formatarNumero}/>
+						<Button title='Entrar' onPress={ () => this.entrar() }/>
 
-					<Text style={{fontSize: 25}}>{this.state.nome}</Text>
-					<Text style={{fontSize: 25}}>{this.state.numero}</Text>
+						<Text style={{fontSize: 25}}>{this.state.nome}</Text>
+						<Text style={{fontSize: 25}}>{this.state.numero}</Text>
 
-					<Pizza/>
-
-					{/* <FlatList
-						data={this.state.feed}
-						keyExtrator={(item)=> item.id}
-						renderItem={({ item }) => (
-							<Pessoas data={item}/>
-						)}
-					/> */}
-					
-					{/* <Jobs largura={400} altura={400} nome="Steve Jobs"/> */}
-				</View>
+						
+						{/* <FlatListComp/> */}
+						{/* <Jobs largura={400} altura={400} nome="Steve Jobs"/> */}
+					</View>
+				</ScrollView>
 				
 				<Footer/>
 			</View>
@@ -115,24 +109,6 @@ class App extends Component {
 
 	
 }
-
-class Jobs extends Component {
-	render(){
-		let img = 'https://sujeitoprogramador.com/steve.png';
-		
-		return(
-			<View>
-				<Text style={{ fontSize: 25, margin: 15 }} >{this.props.nome}</Text>
-				<Image
-					source={{ uri: img }}
-					style={{ width: this.props.largura, height: this.props.altura, margin: 'auto' }}
-					onPress={ () => this.entrar('Batata') }
-				/>
-			</View>
-		);
-	}
-}
-
 
 const styles = StyleSheet.create({
 	container:{
