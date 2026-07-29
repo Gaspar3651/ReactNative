@@ -4,6 +4,7 @@ import Header 			from './src/Components/Header';
 import Footer 			from './src/Components/Footer';
 import Jobs 			from './src/Components/Jobs';
 import FlatListComp 	from './src/Components/FlatListComp';
+import SwitchComp 		from './src/Components/SwitchComp';
 
 class App extends Component {
 	constructor(props){
@@ -45,6 +46,8 @@ class App extends Component {
 
 						<Text style={{fontSize: 25}}>{this.state.nome}</Text>
 						<Text style={{fontSize: 25}}>{this.state.numero}</Text>
+
+						<SwitchComp/>
 
 						
 						{/* <FlatListComp/> */}
