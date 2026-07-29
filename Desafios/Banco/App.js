@@ -59,12 +59,16 @@ export default class App extends Component {
 
                     <View style={styles.areaCampo}>
                         <Text style={styles.labelCampo}>Limite de Crédito</Text>
-                        <Slider
-                            minimumValue={0}
-                            maximumValue={500}
-                            value={this.state.limiteCredito}
-                            onValueChange={(value) => {this.setState({limiteCredito: value})}}
-                        />
+                        <View style={[styles.areaInline, styles.areaCampo]}>
+                            <Slider
+                                style={{width: 370}}
+                                minimumValue={0}
+                                maximumValue={500}
+                                value={this.state.limiteCredito}
+                                onValueChange={(value) => {this.setState({limiteCredito: value})}}
+                            />
+                            <Text style={[styles.labelCampo, {width: 85}]}>R$ {this.state.limiteCredito.toFixed(2)}</Text>
+                        </View>
                     </View>
 
                     <View style={[styles.areaInline, styles.areaCampo]}>
@@ -85,13 +89,14 @@ export default class App extends Component {
     }
 
     cadastroCliente(){
-        let msgAlert = 'Preenchar os campos para continuar:';
-        msgAlert = (this.state.nome != null && this.state.nome != '') ? msgAlert : msgAlert + '\n   - Nome';
-        msgAlert = (this.state.idade != null && this.state.idade != '') ? msgAlert : msgAlert + '\n   - Idade';
-        msgAlert = (this.state.sexo != null && this.state.sexo != '' && this.state.sexo != '-- Selecione --') ? msgAlert : msgAlert + '\n   - Sexo';
+        let msgAlertError = 'Preenchar os campos para continuar:';
+        msgAlertError = (this.state.nome            != null && this.state.nome          != '')  ? msgAlertError : msgAlertError + '\n   - Nome';
+        msgAlertError = (this.state.idade           != null && this.state.idade         != '')  ? msgAlertError : msgAlertError + '\n   - Idade';
+        msgAlertError = (this.state.sexo            != null && this.state.sexo          != '' && this.state.sexo != '-- Selecione --') ? msgAlertError : msgAlertError + '\n   - Sexo';
+        msgAlertError = (this.state.limiteCredito   != null && this.state.limiteCredito != '' && this.state.limiteCredito != '0') ? msgAlertError : msgAlertError + '\n   - Limite de Crédito';
         
-        if (msgAlert != 'Preenchar os campos para continuar:') {
-            alert(msgAlert);
+        if (msgAlertError != 'Preenchar os campos para continuar:') {
+            alert(msgAlertError);
             return;
         }
 
@@ -99,11 +104,11 @@ export default class App extends Component {
             nome            : this.state.nome,
             idade           : this.state.idade,
             sexo            : this.state.sexo,
-            limiteCredito   : this.state.limiteCredito,
+            limiteCredito   : this.state.limiteCredito.toFixed(2),
             extudante       : this.state.extudante,
             createdDate     : new Date().toISOString()
         }
-        
+
         this.listClientes.unshift(novoCliente);
     }
 }
