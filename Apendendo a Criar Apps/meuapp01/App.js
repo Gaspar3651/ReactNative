@@ -1,12 +1,24 @@
+import { View, Text, TextInput, Image, Button, StyleSheet, FlatList, ScrollView } from 'react-native';
 import React, { Component } from 'react';
-import { View, Text, TextInput, Image, Button, StyleSheet } from 'react-native';
+import Header 			from './src/Components/Header';
+import Footer 			from './src/Components/Footer';
+import Jobs 			from './src/Components/Jobs';
+import FlatListComp 	from './src/Components/FlatListComp';
+import SwitchComp 		from './src/Components/SwitchComp';
+
 class App extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
 			nome: '',
 			inputNome: '',
-			numero: ''
+			numero: '',
+			feed: [
+				{id: '1', nome: 'Andrielysson',	idade: '18', email: 'teste@gmail.com'	},
+				{id: '2', nome: 'Matheus', 		idade: '22', email: 'batata@gmail.com'	},
+				{id: '3', nome: 'Henrique',		idade: '29', email: 'henrique@gmail.com'},
+				{id: '4', nome: 'Paulo', 		idade: '15', email: 'paulo@gmail.com'	}
+			]
 		};
 
 		this.mudarNome = this.mudarNome.bind(this);
@@ -22,20 +34,26 @@ class App extends Component {
 			<View style={styles.container} >
 				<Header/>
 
-				<View style={[styles.body]}>
-					<Text style={{fontSize: 25}}>Olá Mundo !!!!</Text>
-					<Text style={{fontSize: 25}}>Meu primeiro App</Text>
+				<ScrollView>
+					<View style={[styles.body]}>
+						<Text style={{fontSize: 25}}>Olá Mundo !!!!</Text>
+						<Text style={{fontSize: 25}}>Meu primeiro App</Text>
 
 
-					<TextInput style={styles.input} placeholder='Digite seu nome...' onChangeText={(texto) => {this.setState({inputNome: texto})}}/>
-					<TextInput style={styles.input} placeholder='Digite seu número...' onChangeText={this.formatarNumero}/>
-					<Button title='Entrar' onPress={ () => this.entrar() }/>
+						<TextInput style={styles.input} placeholder='Digite seu nome...' onChangeText={(texto) => {this.setState({inputNome: texto})}}/>
+						<TextInput style={styles.input} placeholder='Digite seu número...' onChangeText={this.formatarNumero}/>
+						<Button title='Entrar' onPress={ () => this.entrar() }/>
 
-					<Text>{this.state.nome}</Text>
-					<Text>{this.state.numero}</Text>
-					
-					<Jobs largura={400} altura={400} nome="Steve Jobs"/>
-				</View>
+						<Text style={{fontSize: 25}}>{this.state.nome}</Text>
+						<Text style={{fontSize: 25}}>{this.state.numero}</Text>
+
+						<SwitchComp/>
+
+						
+						{/* <FlatListComp/> */}
+						{/* <Jobs largura={400} altura={400} nome="Steve Jobs"/> */}
+					</View>
+				</ScrollView>
 				
 				<Footer/>
 			</View>
@@ -95,60 +113,10 @@ class App extends Component {
 	
 }
 
-class Jobs extends Component {
-	render(){
-		let img = 'https://sujeitoprogramador.com/steve.png';
-		
-		return(
-			<View>
-				<Text style={{ fontSize: 25, margin: 15 }} >{this.props.nome}</Text>
-				<Image
-					source={{ uri: img }}
-					style={{ width: this.props.largura, height: this.props.altura, margin: 'auto' }}
-					onPress={ () => this.entrar('Batata') }
-				/>
-			</View>
-		);
-	}
-}
-
-class Footer extends Component{
-	render(){
-		return(
-			<View style={[styles.footer]}>
-				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 01</Text>
-				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 02</Text>
-				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 03</Text>
-				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 04</Text>
-			</View>
-		);
-	}
-}
-class Header extends Component{
-	render(){
-		return(
-			<View style={[styles.header]}>
-				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 01</Text>
-				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 02</Text>
-				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 03</Text>
-				<Text style={[styles.textoPrincipal, styles.alinhaTexto]}>Texto 04</Text>
-			</View>
-		);
-	}
-}
-
 const styles = StyleSheet.create({
 	container:{
 		flex: 1,
 		marginTop: 50,
-	},
-
-	header: {
-		height: 70, 
-		backgroundColor: '#ddd',
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		alignItems: 'center'
 	},
 
 	body: {
@@ -164,23 +132,6 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 		marginTop: 10
 	},
-
-	footer: {
-		height: 70, 
-		backgroundColor: '#ddd',
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		alignItems: 'center'
-	},
-
-	textoPrincipal:{
-		fontSize: 25,
-		color: 'red'
-	},
-
-	alinhaTexto:{
-		textAlign: 'center'
-	}
 });
 
 export default App;
