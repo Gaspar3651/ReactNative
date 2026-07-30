@@ -19,3 +19,17 @@
         </ul>
     </li>
 </ul>
+
+<h2>Objeto Cliente</h2>
+<code>
+{
+    id              : 0,
+    nome            : 'Teste 01',
+    documento       : '111.222.333-44',
+    telefone        : '(11) 9 9999-9999',
+    idade           : '40',
+    sexo            : 'Masculino',
+    limiteCredito   : 395.13,
+    estudante       : false,
+    createdDate     : new Date()
+}

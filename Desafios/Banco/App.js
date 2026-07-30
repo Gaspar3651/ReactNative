@@ -1,5 +1,7 @@
 import { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, Switch, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Switch, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+
+import Clientes from './Components/Clientes'
 
 import { Picker }   from '@react-native-picker/picker';
 import Slider       from '@react-native-community/slider';
@@ -14,7 +16,7 @@ export default class App extends Component {
             telefone : null,
             sexo : null,
             limiteCredito : 250,
-            extudante : false,
+            estudante : false,
             clientes: [],
             sexoOptions: [
                 {id: 0, label: '-- Selecione --'        , value: ''},
@@ -38,8 +40,8 @@ export default class App extends Component {
 
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Banco</Text>
                 <ScrollView>
+                    <Text style={styles.title}>Cadastro de Cliente</Text>
 
                     <View style={styles.areaCampo}>
                         <Text style={styles.labelCampo}>Nome</Text>
@@ -90,15 +92,24 @@ export default class App extends Component {
                     <View style={[styles.areaInline, styles.areaCampo]}>
                         <Text style={[styles.labelCampo]}>É estudante?</Text>
                         <Switch
-                            value={this.state.extudante}
-                            label='Teste'
-                            onValueChange={(value) => {this.setState({extudante: value})}}
+                            value={this.state.estudante}
+                            onValueChange={(value) => {this.setState({estudante: value})}}
                         />
                     </View>
 
                     <TouchableOpacity style={styles.btn} onPress={this.cadastroCliente}>
                         <Text style={styles.btnTexto}>Cadastrar</Text>
                     </TouchableOpacity>
+                    
+                    <Text style={[styles.title, {marginTop: 70}]}>Clientes Cadastrados</Text>
+                    <FlatList
+                        data={this.state.clientes}
+                        horizontal={true}
+                        keyExtrator={(item)=> item.id}
+                        renderItem={({ item }) => (
+                            <Clientes infoCliente={item}/>
+                        )}
+                    />
                 </ScrollView>
             </View>
         );
@@ -107,9 +118,9 @@ export default class App extends Component {
     cadastroCliente(){
         let msgAlertError = 'Preencha corretamente os campos abaixo para continuar:';
         msgAlertError = (this.state.nome            != null && this.state.nome          != '')  ? msgAlertError : msgAlertError + '\n   - Nome';
-        msgAlertError = (this.state.idade           != null && this.state.idade         != '')  ? msgAlertError : msgAlertError + '\n   - Idade';
-        msgAlertError = (this.state.telefone        != null && this.state.telefone      != '' && this.state.telefone.length == 16)  ? msgAlertError : msgAlertError + '\n   - Telefone';
         msgAlertError = (this.state.documento       != null && this.state.documento     != '' && this.state.documento.length == 14) ? msgAlertError : msgAlertError + '\n   - CPF';
+        msgAlertError = (this.state.telefone        != null && this.state.telefone      != '' && this.state.telefone.length == 16)  ? msgAlertError : msgAlertError + '\n   - Telefone';
+        msgAlertError = (this.state.idade           != null && this.state.idade         != '')  ? msgAlertError : msgAlertError + '\n   - Idade';
         msgAlertError = (this.state.sexo            != null && this.state.sexo          != '' && this.state.sexo != '-- Selecione --') ? msgAlertError : msgAlertError + '\n   - Sexo';
         msgAlertError = (this.state.limiteCredito   != null && this.state.limiteCredito != '' && this.state.limiteCredito != '0') ? msgAlertError : msgAlertError + '\n   - Limite de Crédito';
         
@@ -123,10 +134,8 @@ export default class App extends Component {
             return;
         }
         
-        console.log('TESTE::: ' + this.state.documento);
         let docDuplicado = false;
         this.listClientes.forEach((item, idex) =>{
-            console.log('>>>> ' + item.documento);
             
             if (this.state.documento == item.documento){
                 docDuplicado = true;
@@ -139,14 +148,15 @@ export default class App extends Component {
         }
 
         let novoCliente = {
+            id              : this.state.clientes.length,
             nome            : this.state.nome,
             documento       : this.state.documento,
             telefone        : this.state.telefone,
             idade           : this.state.idade,
             sexo            : this.state.sexo,
             limiteCredito   : this.state.limiteCredito.toFixed(2),
-            extudante       : this.state.extudante,
-            createdDate     : new Date().toISOString()
+            estudante       : this.state.estudante,
+            createdDate     : new Date()
         }
 
         this.listClientes.unshift(novoCliente);
@@ -157,10 +167,9 @@ export default class App extends Component {
             telefone : null,
             sexo : '',
             limiteCredito : 250,
-            extudante : false,
+            estudante : false,
             clientes: this.listClientes
         })
-        console.log(JSON.stringify(this.listClientes));
         
     }
 
@@ -187,8 +196,6 @@ export default class App extends Component {
 			// TELEFONE MOVEL => (11) 9 8765-4321
 			texto = texto.replace(/^(\d{2})(\d{1})(\d{4})(\d{4})$/, '($1) $2 $3-$4');
 		
-		} else {
-			texto = texto.replace(/^(\d{2})(\d+)/, '($1) $2');
 		}
 
 		this.setState({
@@ -260,7 +267,8 @@ const styles = StyleSheet.create({
     title:{
         fontSize: 35,
         textAlign: 'center',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color:  '#00aeef'
     },
 
     areaCampo:{
@@ -273,7 +281,7 @@ const styles = StyleSheet.create({
     
     inputText:{
         borderWidth: 2,
-        borderColor: 'gray',
+        borderColor: '#00aeef',
         borderRadius: 15,
         fontSize: 20
     },
