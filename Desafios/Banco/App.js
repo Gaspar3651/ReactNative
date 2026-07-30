@@ -10,11 +10,11 @@ export default class App extends Component {
     constructor(props){
         super(props);
         this.state={
-            nome : null,
-            idade : null,
-            documento : null,
-            telefone : null,
-            sexo : null,
+            nome : '',
+            idade : '',
+            documento : '',
+            telefone : '',
+            sexo : '',
             limiteCredito : 250,
             estudante : false,
             clientes: [],
@@ -75,26 +75,28 @@ export default class App extends Component {
                         </Picker>
                     </View>
 
-                    <View style={styles.areaCampo}>
+                    <View style={[styles.areaCampo]}>
                         <Text style={styles.labelCampo}>Limite de Crédito</Text>
-                        <View style={[styles.areaInline, styles.areaCampo]}>
+                        <View style={[styles.areaInline, styles.labelCampo]}>
                             <Slider
-                                style={{width: 370}}
+                                style={{width: '70%'}}
                                 minimumValue={0}
                                 maximumValue={500}
                                 value={this.state.limiteCredito}
                                 onValueChange={(value) => {this.setState({limiteCredito: value})}}
                             />
-                            <Text style={[styles.labelCampo, {width: 85}]}>R$ {this.state.limiteCredito.toFixed(2)}</Text>
+                            <Text style={[styles.labelCampo, {width: '30%', paddingLeft: 10, textAlign: 'right'}]}>R$ {this.state.limiteCredito.toFixed(2)}</Text>
                         </View>
                     </View>
 
-                    <View style={[styles.areaInline, styles.areaCampo]}>
+                    <View style={[styles.areaCampo, styles.areaInline]}>
                         <Text style={[styles.labelCampo]}>É estudante?</Text>
-                        <Switch
-                            value={this.state.estudante}
-                            onValueChange={(value) => {this.setState({estudante: value})}}
-                        />
+                        <View style={styles.labelCampo}>
+                            <Switch
+                                value={this.state.estudante}
+                                onValueChange={(value) => {this.setState({estudante: value})}}
+                            />
+                        </View>
                     </View>
 
                     <TouchableOpacity style={styles.btn} onPress={this.cadastroCliente}>
@@ -161,10 +163,10 @@ export default class App extends Component {
 
         this.listClientes.unshift(novoCliente);
         this.setState({
-            nome : null,
-            idade : null,
-            documento : null,
-            telefone : null,
+            nome : '',
+            idade : '',
+            documento : '',
+            telefone : '',
             sexo : '',
             limiteCredito : 250,
             estudante : false,
@@ -280,6 +282,7 @@ const styles = StyleSheet.create({
     },
     
     inputText:{
+        height: 50,
         borderWidth: 2,
         borderColor: '#00aeef',
         borderRadius: 15,
@@ -290,6 +293,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
+        width: '95%'
     },
 
     btn:{
