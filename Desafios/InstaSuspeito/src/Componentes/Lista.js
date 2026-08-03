@@ -7,6 +7,10 @@ export default class App extends Component {
         this.state = {
             feed: this.props.data
         };
+
+        this.mostraLikes = this.mostraLikes.bind(this);
+        this.like = this.like.bind(this);
+        this.carregarLike = this.carregarLike.bind(this);
     }
 
     render(){
@@ -28,13 +32,15 @@ export default class App extends Component {
                 />
 
                 <View style={styles.areaBtn}>
-                    <TouchableOpacity>
-                        <Image source={require('../img/like.png')} style={styles.iconeLike}/>
+                    <TouchableOpacity onPress={this.like}>
+                        <Image source={this.carregarLike(this.state.feed.likeada)} style={styles.iconeLike}/>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.btnSend}>
                         <Image source={require('../img/send.png')} style={styles.iconeLike}/>
                     </TouchableOpacity>
                 </View>
+
+                {this.mostraLikes(this.state.feed.likers)}
 
                 <View style={styles.viewRodape}>
                     <Text style={styles.nomeRodape}>{this.state.feed.nome}</Text>
@@ -42,6 +48,36 @@ export default class App extends Component {
                 </View>
             </View>
         );
+    }
+
+    mostraLikes(likers){
+        let feed = this.state.feed;
+
+        if(feed.likers <= 0){
+            return;
+        }
+
+        return(
+            <View>
+                <Text style={styles.likes}>
+                    {feed.likers} {feed.likers > 1 ? 'curtidas' : 'curtida'}
+                </Text>
+            </View>
+        );
+    }
+
+    like(){
+        let feed = this.state.feed;
+        feed.likeada = !feed.likeada;
+        feed.likeada ? feed.likers += 1 : feed.likers -= 1;
+
+        this.setState({
+            feed: feed
+        });
+    }
+
+    carregarLike(likeada){
+        return likeada ? require('../img/likeada.png') : require('../img/like.png');
     }
 }
 
@@ -110,4 +146,8 @@ const styles = StyleSheet.create({
         color: '#000',
     },
 
+    likes:{
+        fontWeight: 'bold',
+        marginLeft: 5,
+    }
 });
