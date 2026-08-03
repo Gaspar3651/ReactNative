@@ -1,0 +1,153 @@
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList} from 'react-native';
+
+export default class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            feed: this.props.data
+        };
+
+        this.mostraLikes = this.mostraLikes.bind(this);
+        this.like = this.like.bind(this);
+        this.carregarLike = this.carregarLike.bind(this);
+    }
+
+    render(){
+        return (
+            <View style={styles.areaFeed}>
+                <View style={styles.viewPerfil}>
+                    <Image
+                        source={{uri: this.state.feed.imgperfil}}
+                        style={styles.fotoPerfil}
+                    />
+                    
+                    <Text style={styles.nomeUsuario}>{this.state.feed.nome}</Text>
+                </View>
+
+                <Image
+                    resizeMode='cover'
+                    source={{uri: this.state.feed.imgPublicacao}}    
+                    style={styles.fotoPublicacao}
+                />
+
+                <View style={styles.areaBtn}>
+                    <TouchableOpacity onPress={this.like}>
+                        <Image source={this.carregarLike(this.state.feed.likeada)} style={styles.iconeLike}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.btnSend}>
+                        <Image source={require('../img/send.png')} style={styles.iconeLike}/>
+                    </TouchableOpacity>
+                </View>
+
+                {this.mostraLikes(this.state.feed.likers)}
+
+                <View style={styles.viewRodape}>
+                    <Text style={styles.nomeRodape}>{this.state.feed.nome}</Text>
+                    <Text style={styles.descricaoRodape}>{this.state.feed.descricao}</Text>
+                </View>
+            </View>
+        );
+    }
+
+    mostraLikes(likers){
+        let feed = this.state.feed;
+
+        if(feed.likers <= 0){
+            return;
+        }
+
+        return(
+            <View>
+                <Text style={styles.likes}>
+                    {feed.likers} {feed.likers > 1 ? 'curtidas' : 'curtida'}
+                </Text>
+            </View>
+        );
+    }
+
+    like(){
+        let feed = this.state.feed;
+        feed.likeada = !feed.likeada;
+        feed.likeada ? feed.likers += 1 : feed.likers -= 1;
+
+        this.setState({
+            feed: feed
+        });
+    }
+
+    carregarLike(likeada){
+        return likeada ? require('../img/likeada.png') : require('../img/like.png');
+    }
+}
+
+const styles = StyleSheet.create({
+    areaFeed: {
+    
+    },
+
+    viewPerfil: {
+        flexDirection: 'row',
+        flex: 1,
+        alignItems: 'center',
+        padding: 8,
+    },
+
+    fotoPerfil: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        margin: 5
+    },
+
+    fotoPublicacao: {
+        flex: 1,
+        height: 400,
+        alignItems: 'center',
+    },
+
+    nomeUsuario: {
+        fontSize: 22,
+        textAlign: 'left',
+        color: '#000',
+    },
+
+    areaBtn:{
+        flexDirection: 'row',
+        padding: 5,
+    },
+
+    iconeLike:{
+        width: 33,
+        height: 33,
+        padding: 5,
+    },
+
+    btnSend:{
+        paddingRight: 5,
+    },
+
+    viewRodape:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 5,
+    },
+
+    nomeRodape:{
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#000',
+        padding: 5,
+    },
+
+    descricaoRodape:{
+        paddingLeft: 5,
+        fontSize: 15,
+        color: '#000',
+    },
+
+    likes:{
+        fontWeight: 'bold',
+        marginLeft: 5,
+    }
+});
