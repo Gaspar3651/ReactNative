@@ -1,10 +1,12 @@
-import { View, Text, TextInput, Image, Button, StyleSheet, FlatList, ScrollView } from 'react-native';
+import { View, Text, TextInput, Image, Button, StyleSheet, FlatList, ScrollView, Modal } from 'react-native';
 import React, { Component } from 'react';
+
 import Header 			from './src/Components/Header';
 import Footer 			from './src/Components/Footer';
 import Jobs 			from './src/Components/Jobs';
 import FlatListComp 	from './src/Components/FlatListComp';
 import SwitchComp 		from './src/Components/SwitchComp';
+import ModalComp 		from './src/Components/ModalComp';
 
 class App extends Component {
 	constructor(props){
@@ -13,6 +15,7 @@ class App extends Component {
 			nome: '',
 			inputNome: '',
 			numero: '',
+			modalVisible: false,
 			feed: [
 				{id: '1', nome: 'Andrielysson',	idade: '18', email: 'teste@gmail.com'	},
 				{id: '2', nome: 'Matheus', 		idade: '22', email: 'batata@gmail.com'	},
@@ -46,9 +49,14 @@ class App extends Component {
 
 						<Text style={{fontSize: 25}}>{this.state.nome}</Text>
 						<Text style={{fontSize: 25}}>{this.state.numero}</Text>
+						
+						<Modal transparent={true} animationType='slide' visible={this.state.modalVisible}>
+							<View style={{flex: 1, justifyContent: 'center', margin: 15, with: '100%'}}>
+								<ModalComp fechar={()=> this.setState({modalVisible: false})}/>
+							</View>
+						</Modal>
 
 						<SwitchComp/>
-
 						
 						{/* <FlatListComp/> */}
 						{/* <Jobs largura={400} altura={400} nome="Steve Jobs"/> */}
@@ -68,13 +76,10 @@ class App extends Component {
 	}
 
 	entrar(){
-		if (this.state.inputNome === '') {
-			alert('Digite seu nome!');
-			return;
-		}
-		
+
 		this.setState({
-			nome: 'Bem Vindo: ' + this.state.inputNome
+			// nome: 'Bem Vindo: ' + this.state.inputNome,
+			modalVisible: true
 		});
 	}
 
