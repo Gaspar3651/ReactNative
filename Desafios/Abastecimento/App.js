@@ -8,6 +8,7 @@ export default class App extends Component {
 		this.state = {
 			precoAlcool: 0,
 			precoGasolina: 0,
+			compensaUsar: '',
 			modalResultVisible: false,
 		};
 
@@ -38,7 +39,7 @@ export default class App extends Component {
 					<Text style={styles.labelInput}>Calcular</Text>
 				</TouchableOpacity>
 
-				{/* <ModalResult compensaUsar={this.state.compensaUsar} precoAlcool={this.state.precoAlcool} precoGasolina={this.state.precoGasolina} fechar={() => this.fecharModal()}/> */}
+				<ModalResult style={styles.modal} modalResultVisible={this.state.modalResultVisible} compensaUsar={this.state.compensaUsar} precoAlcool={this.state.precoAlcool} precoGasolina={this.state.precoGasolina} fechar={()=> {this.fecharModal()}}/>
 			</View>
 		);
 	}
@@ -62,21 +63,21 @@ export default class App extends Component {
 			if(resultado >= 0.7){
 				this.setState({ 
 					modalResultVisible: true,
-					compensaUsar: 'Melhor abastecer com Gasolina',
+					compensaUsar: 'Compensa usar Gasolina',
 				});
 			}else{
 				this.setState({ 
 					modalResultVisible: true,
-					compensaUsar: 'Melhor abastecer com Álcool',
+					compensaUsar: 'Compensa usar Álcool',
 				});
 			}
-			
 		}else{
 			alert('Preencha os preços primeiro!');
 		}
 	}
 
 	fecharModal(){
+		
 		this.setState({ modalResultVisible: false });
 	}
 }
@@ -127,5 +128,10 @@ const styles = StyleSheet.create({
 	btnCalcularNovamente:{
 		backgroundColor: '#212121',
 		color: '#EF4130',
+	},
+
+	modal:{
+		flex: 1,
+		height: 350,
 	}
 });
