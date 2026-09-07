@@ -1,9 +1,33 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
-	const [nome, setNome] = useState('Andrielysson');
+	const [nome, setNome] = useState('');
 	const [input, setInput] = useState('');
+
+	// ComponentDidMount => ConnectedCallback
+	useEffect(() => {
+		async function getStorage(){
+			const nomeStorage = await AsyncStorage.getItem('nomes');
+			if(nomeStorage !== null){
+				setNome(nomeStorage);
+			}
+		}
+
+		getStorage();
+
+		// return () => {} 
+	}, []);
+
+	// Trigger do state 'nome'
+	useEffect(() => {
+		async function saveStorage(){
+			await AsyncStorage.setItem('nomes', nome);
+		}
+
+		saveStorage();
+	}, [nome]);
 
 	return (
 		<View style={styles.container}>
