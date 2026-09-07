@@ -1,11 +1,11 @@
-import React, {useState, useEffect, useMemo} from 'react';
+import React, {useState, useEffect, useMemo, useRef} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
 	const [nome, setNome] = useState('');
 	const [input, setInput] = useState('');
-
+	const nomeInput = useRef(null);
 
 	// ComponentDidMount => ConnectedCallback
 	useEffect(() => {
@@ -43,6 +43,7 @@ export default function App() {
 				style={styles.textInput}
 				placeholder="Digite seu nome"
 				value={input}
+				ref={nomeInput}
 				onChangeText={(texto) => setInput(texto)}
 			/>
 			<Text style={styles.texto}>{nome}</Text>
@@ -51,12 +52,20 @@ export default function App() {
 			<TouchableOpacity style={styles.btn} onPress={alterarNome}>
 				<Text style={styles.btnText}>Alterar Nome</Text>
 			</TouchableOpacity>
+
+			<TouchableOpacity style={styles.btn} onPress={novoNome}>
+				<Text style={styles.btnText}>Novo Nome</Text>
+			</TouchableOpacity>
 		</View>
 	);
 
 	function alterarNome(){
 		setNome(input);
 		setInput('');
+	}
+
+	function novoNome(){
+		nomeInput.current.focus();
 	}
 }
 
@@ -73,6 +82,7 @@ const styles = StyleSheet.create({
 	btn:{
 		backgroundColor: '#222',
 		alignItems: 'center',
+		marginTop: 10,
 	},	
 	btnText:{
 		fontSize: 20,
