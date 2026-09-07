@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
 	const [nome, setNome] = useState('');
 	const [input, setInput] = useState('');
+
 
 	// ComponentDidMount => ConnectedCallback
 	useEffect(() => {
@@ -29,6 +30,12 @@ export default function App() {
 		saveStorage();
 	}, [nome]);
 
+	// Trigger do state 'nome' => useMemo
+	const letrasNome = useMemo(() => {
+		console.log('Calculando letras do nome');
+		return nome.length
+	}, [nome]);
+
 	return (
 		<View style={styles.container}>
 			
@@ -39,6 +46,7 @@ export default function App() {
 				onChangeText={(texto) => setInput(texto)}
 			/>
 			<Text style={styles.texto}>{nome}</Text>
+			<Text style={styles.texto}>Tem {letrasNome} letras</Text>
 
 			<TouchableOpacity style={styles.btn} onPress={alterarNome}>
 				<Text style={styles.btnText}>Alterar Nome</Text>
