@@ -6,10 +6,7 @@ O cliente conversa pelo app, a mensagem chega no Salesforce (Omni-Channel / Chat
 
 ## Demonstração
 
-<!-- Para exibir o player aqui: edite este README no GitHub, arraste o VideoDemo.mp4 para
-     o editor e substitua esta linha pelo link https://github.com/user-attachments/assets/... gerado -->
-
-▶️ [Assistir ao vídeo de demonstração](./assets/VideoDemo.mp4)
+https://github.com/user-attachments/assets/5f9c58ae-810b-4863-aaad-92359fadb7f5
 
 ## Como funciona
 
