@@ -1,0 +1,14 @@
+{
+  "name": "byoc-pubsub",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node src/pubsub.js"
+  },
+  "dependencies": {
+    "salesforce-pubsub-api-client": "^5.6.1",
+    "underscore": "^1.13.8",
+    "ws": "^8.22.0"
+  },
+  "private": true
+}

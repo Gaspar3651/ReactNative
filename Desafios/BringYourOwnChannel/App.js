@@ -6,11 +6,6 @@ import getTokenApi from './Api/getToken';
 import sendMsgApi from './Api/sendMsg';
 import Mensagem from './Components/Mensagem';
 
-// Mensagens do Chatbot podem vir sem clientTimestamp
-function horario(entrada) {
-	return entrada.clientTimestamp || entrada.serverReceivedTimestamp || 0;
-}
-
 export default function App() {
 	const [mensagem, setMensagem] = useState('');
 	const [mensagens, setMensagens] = useState([]);
@@ -19,28 +14,23 @@ export default function App() {
 	const tokenRef = useRef(null)
 	const conversationIdentifierRef = useRef(null)
 	const listaRef = useRef(null)
-	const buscandoRef = useRef(false)
 
-	// Busca a conversa a cada 1s para receber as respostas do Chatbot
+	// Abre uma conexão com a ponte (middleware/src/pubsub.js) que fica aberta enquanto o app existe.
+	// As respostas do Chatbot/agente chegam por ela assim que o Salesforce publica o evento.
+	// Troque o IP pelo do computador que roda a ponte
 	useEffect(() => {
-		const intervalo = setInterval(buscarMensagens, 3000);
+		const ws = new WebSocket('ws://192.168.1.5:3000/?cliente=cliente-teste-003');
 
-		return () => clearInterval(intervalo);
+		ws.onopen = () => console.log('Conectado à ponte');
+		ws.onmessage = (evento) => {
+			const resposta = JSON.parse(evento.data);
+			setMensagens((anteriores) => [...anteriores, resposta]);
+		};
+		ws.onerror = (erro) => console.error('Erro na ponte:', erro.message);
+		ws.onclose = () => console.log('Conexão com a ponte fechada');
+
+		return () => ws.close();
 	}, []);
-
-	async function buscarMensagens() {
-		// Pula se ainda não há conversa ou se a busca anterior não terminou
-		if (!conversationIdentifierRef.current || buscandoRef.current) {
-			return;
-		}
-
-		buscandoRef.current = true;
-		try {
-			await getConversation();
-		} finally {
-			buscandoRef.current = false;
-		}
-	}
 
 	async function getToken(){
 		if (tokenRef.current) {
@@ -147,57 +137,7 @@ export default function App() {
 			console.error('Error fetching send msg 2:', error);
 		}
 
-		await getConversation();
-
 		setLoading(false);
-	}
-
-	async function getConversation() {
-		if (!conversationIdentifierRef.current) {
-			return;
-		}
-
-		// FromEnd traz as mensagens mais recentes primeiro; com FromStart, quando a conversa
-		// passa do limite de registros, as mensagens novas nunca aparecem
-		const path = '/services/data/v62.0/connect/conversation/'+ conversationIdentifierRef.current +'/entries?queryDirection=FromEnd&recordLimit=100';
-		const accessToken = await getToken();
-
-		await getTokenApi.get(
-			path,
-			{
-				headers: {
-					'Authorization': 'Bearer ' + accessToken,
-					'Accept': 'application/json'
-				}
-			}
-		).then((response) => {
-			const entradas = (response.data.conversationEntries || [])
-				.filter((entrada) => entrada.messageText)
-				.sort((a, b) => horario(a) - horario(b));
-
-			console.log('Polling:', entradas.length, 'mensagens; última:', entradas[entradas.length - 1]?.messageText);
-
-			setMensagens((anteriores) => {
-				// Mantém as mensagens enviadas pelo app que o servidor ainda não registrou
-				const pendentes = anteriores.filter((local) =>
-					local.pendente && !entradas.some((servidor) =>
-						servidor.sender?.role === 'EndUser' &&
-						servidor.messageText === local.messageText &&
-						horario(servidor) >= local.clientTimestamp - 5000
-					)
-				);
-				const novaLista = [...entradas, ...pendentes];
-
-				// Evita re-renderizar a lista a cada segundo quando nada mudou
-				const assinatura = (lista) => lista.map((m) => m.identifier).join('|');
-				return assinatura(novaLista) === assinatura(anteriores) ? anteriores : novaLista;
-			});
-		}).catch((error) => {
-			if (error.response?.status === 401) {
-				tokenRef.current = null; // token expirou, busca um novo na próxima chamada
-			}
-			console.error('Error fetching getConversation:', error.response?.data || error.message);
-		});
 	}
 
 	return (
