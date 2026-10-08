@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, ActivityIndicator, FlatList, KeyboardAvoidingView, Platform, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, ActivityIndicator, FlatList, KeyboardAvoidingView, Keyboard, Platform } from 'react-native';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Crypto from 'expo-crypto';
 
 import getTokenApi from './Api/getToken';
@@ -9,14 +10,47 @@ import Mensagem from './Components/Mensagem';
 // Identificador do cliente no canal, vindo do .env
 const CLIENTE = process.env.EXPO_PUBLIC_CLIENTE;
 
+// O SafeAreaProvider mede as áreas seguras do aparelho (status bar, notch, barra de navegação)
+// e disponibiliza essas medidas para o useSafeAreaInsets
 export default function App() {
+	return (
+		<SafeAreaProvider>
+			<Chat/>
+		</SafeAreaProvider>
+	);
+}
+
+function Chat() {
 	const [mensagem, setMensagem] = useState('');
 	const [mensagens, setMensagens] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const [tecladoAberto, setTecladoAberto] = useState(false);
 
 	const tokenRef = useRef(null)
 	const conversationIdentifierRef = useRef(null)
 	const listaRef = useRef(null)
+
+	// Tamanho real das áreas seguras deste aparelho, em vez de valores fixos
+	const insets = useSafeAreaInsets();
+
+	// Acompanha o teclado: com ele aberto, o espaço da barra de navegação não é necessário
+	// (o iOS avisa antes da animação, "Will"; o Android só depois, "Did")
+	useEffect(() => {
+		const eventoAbrir = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+		const eventoFechar = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+
+		const abrir = Keyboard.addListener(eventoAbrir, () => {
+			setTecladoAberto(true);
+			// Mantém a última mensagem visível acima do teclado
+			setTimeout(() => listaRef.current?.scrollToEnd({ animated: true }), 100);
+		});
+		const fechar = Keyboard.addListener(eventoFechar, () => setTecladoAberto(false));
+
+		return () => {
+			abrir.remove();
+			fechar.remove();
+		};
+	}, []);
 
 	// Abre uma conexão com a ponte (middleware/src/pubsub.js) que fica aberta enquanto o app existe.
 	// As respostas do Chatbot/agente chegam por ela assim que o Salesforce publica o evento.
@@ -144,11 +178,13 @@ export default function App() {
 	}
 
 	return (
+		// "padding" nas duas plataformas: com o edge-to-edge do Android, a tela não encolhe
+		// sozinha quando o teclado abre, então o KeyboardAvoidingView precisa empurrar o conteúdo
 		<KeyboardAvoidingView
 			style={styles.container}
-			behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+			behavior='padding'
 		>
-			<View style={styles.header}>
+			<View style={[styles.header, { paddingTop: insets.top + 12 }]}>
 				<Text style={styles.headerTitulo}>Atendimento</Text>
 				<Text style={styles.headerSubtitulo}>Cliente Teste</Text>
 			</View>
@@ -166,7 +202,8 @@ export default function App() {
 				}
 			/>
 
-			<View style={styles.areaInput}>
+			{/* Teclado fechado: respeita a barra de navegação. Aberto: encosta no teclado */}
+			<View style={[styles.areaInput, { paddingBottom: tecladoAberto ? 8 : insets.bottom + 8 }]}>
 				<TextInput
 					style={styles.input}
 					placeholder='Digite uma mensagem'
@@ -197,7 +234,6 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 	},
 	header: {
-		paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 0) + 12 : 54,
 		paddingBottom: 12,
 		paddingHorizontal: 16,
 		backgroundColor: '#09A9FF',
@@ -227,7 +263,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'flex-end',
 		padding: 8,
-		paddingBottom: Platform.OS === 'ios' ? 28 : 8,
 		borderTopWidth: 1,
 		borderTopColor: '#ECEFF1',
 		backgroundColor: '#fff',
