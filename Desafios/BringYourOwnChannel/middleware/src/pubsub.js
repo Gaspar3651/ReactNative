@@ -3,10 +3,9 @@
 import { WebSocketServer } from 'ws';
 import PubSubApiClient from 'salesforce-pubsub-api-client';
 
-// Platform Event de saída configurado no Bring Your Own Channel
-const TOPICO = '/event/Test_Event__e';
-// Porta da ponte (não usar 8081, que é a do Metro/Expo)
-const PORTA = 3000;
+// Valores vindos do middleware/.env (carregado pelo "node --env-file=.env")
+const TOPICO = process.env.SF_TOPICO;
+const PORTA = Number(process.env.PORTA);
 
 // 0. Ponte: o app conecta em ws://<ip-do-pc>:3000/?cliente=cliente-teste-003
 //    e a conexão fica aberta; a ponte envia cada mensagem assim que ela chega
@@ -23,9 +22,9 @@ wss.on('connection', (app, req) => {
 // 1. Cria o cliente. Ele faz o login OAuth (client credentials) sozinho
 const client = new PubSubApiClient({
 	authType: 'oauth-client-credentials',
-	loginUrl: 'https://{{org_domain}}.my.salesforce.com',
-	clientId: '{{client_id}}',
-	clientSecret: '{{client_secret}}',
+	loginUrl: process.env.SF_LOGIN_URL,
+	clientId: process.env.SF_CLIENT_ID,
+	clientSecret: process.env.SF_CLIENT_SECRET,
 });
 
 // 2. Abre a conexão gRPC com o servidor da Pub/Sub API (api.pubsub.salesforce.com:7443)

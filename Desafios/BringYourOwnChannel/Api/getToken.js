@@ -2,7 +2,7 @@ import axios from 'axios';
 // https://sujeitoprogramador.com/r-api/?api=filmes
 
 const api = axios.create({
-    baseURL: 'https://{{OrgURL}}.my.salesforce.com/',
+    baseURL: process.env.EXPO_PUBLIC_SF_URL,
 });
 
 export default api;

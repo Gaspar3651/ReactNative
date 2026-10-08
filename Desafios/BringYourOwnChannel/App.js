@@ -6,6 +6,9 @@ import getTokenApi from './Api/getToken';
 import sendMsgApi from './Api/sendMsg';
 import Mensagem from './Components/Mensagem';
 
+// Identificador do cliente no canal, vindo do .env
+const CLIENTE = process.env.EXPO_PUBLIC_CLIENTE;
+
 export default function App() {
 	const [mensagem, setMensagem] = useState('');
 	const [mensagens, setMensagens] = useState([]);
@@ -17,9 +20,9 @@ export default function App() {
 
 	// Abre uma conexão com a ponte (middleware/src/pubsub.js) que fica aberta enquanto o app existe.
 	// As respostas do Chatbot/agente chegam por ela assim que o Salesforce publica o evento.
-	// Troque o IP pelo do computador que roda a ponte
+	// O endereço da ponte fica no .env (EXPO_PUBLIC_PONTE_URL)
 	useEffect(() => {
-		const ws = new WebSocket('ws://192.168.1.5:3000/?cliente=cliente-teste-003');
+		const ws = new WebSocket(process.env.EXPO_PUBLIC_PONTE_URL + '/?cliente=' + CLIENTE);
 
 		ws.onopen = () => console.log('Conectado à ponte');
 		ws.onmessage = (evento) => {
@@ -38,9 +41,9 @@ export default function App() {
 		}
 
 		const body = new URLSearchParams({
-			grant_type: '{{grant_type}}',
-			client_id: '{{client_id}}',
-			client_secret: '{{client_secret}}'
+			grant_type: 'client_credentials',
+			client_id: process.env.EXPO_PUBLIC_SF_CLIENT_ID,
+			client_secret: process.env.EXPO_PUBLIC_SF_CLIENT_SECRET
 		}).toString();
 
 		await getTokenApi.post(
@@ -72,8 +75,8 @@ export default function App() {
 		const nowMs = Date.now();
 
 		const payload = {
-			to: '{{Id_Conversation}}',
-			from: 'cliente-teste-003',
+			to: process.env.EXPO_PUBLIC_SF_CHANNEL_ADDRESS_ID,
+			from: CLIENTE,
 			interactions: [
 				{
 					timestamp: nowMs,
@@ -107,7 +110,7 @@ export default function App() {
 				identifier: guid,
 				messageText: texto,
 				clientTimestamp: nowMs,
-				sender: { role: 'EndUser', subject: 'cliente-teste-003' },
+				sender: { role: 'EndUser', subject: CLIENTE },
 				pendente: true,
 			},
 		]);
@@ -121,8 +124,8 @@ export default function App() {
 				{
 					headers: {
 						'Authorization': 'Bearer ' + accessToken,
-						'OrgId': '{{OrgId}}',
-						'AuthorizationContext': '{{ChannelDefinitionName}}',
+						'OrgId': process.env.EXPO_PUBLIC_SF_ORG_ID,
+						'AuthorizationContext': process.env.EXPO_PUBLIC_SF_AUTHORIZATION_CONTEXT,
 						'RequestId': guid,
 						'Accept': 'application/json',
 					},
